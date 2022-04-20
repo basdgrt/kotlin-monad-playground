@@ -2,8 +2,7 @@ package github.basdgrt
 
 class CoffeeMachine {
     fun makeCoffee(): Either<MachineFailure, Coffee> {
-        // Return type is Either<MachineFailure, Either<MachineFailure, Coffee>>, we put a box inside a box...
-        return grindBeans().map { brew(it) }
+        return grindBeans().flatMap { brew(it) }
     }
 }
 
@@ -16,5 +15,6 @@ object CoffeeBeans
 
 sealed class MachineFailure {
     object NotEnoughBeans
+    object MissingFilter
 }
 
