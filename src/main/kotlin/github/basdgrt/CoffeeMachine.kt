@@ -7,9 +7,14 @@ class CoffeeMachine {
     }
 }
 
+/**
+ * @throws NotEnoughBeansException
+ */
 private fun grindBeans(): CoffeeBeans = TODO()
+
 private fun brew(beans: CoffeeBeans): Coffee = TODO()
 
 object Coffee
 object CoffeeBeans
 
+object NotEnoughBeansException : RuntimeException()
