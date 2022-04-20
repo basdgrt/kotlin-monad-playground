@@ -1,15 +1,8 @@
 package github.basdgrt
 
-/*
- * Although ugly, this works.
- */
 class CoffeeMachine {
     fun makeCoffee(): Either<MachineFailure, Coffee> {
-        val beansEither = grindBeans()
-        return when (beansEither) {
-            is Either.Failure -> beansEither // instance of Failure
-            is Either.Success -> Either.Success(brew(beansEither.value))
-        }
+        return grindBeans().map { brew(it) }
     }
 }
 
