@@ -1,22 +1,13 @@
 package github.basdgrt
 
 /*
- * If we modify the coffeeMachine to throw another exception, the code will still compile.
- * We won't be forced to handle the exception here.
- * (example: adding a PowerNotPluggedInException or MissingFilterException)
+ * Compilation fails because serveToCustomer expects coffee as input, but it receives an Either instead.
+ * AKA compilation fails because we are not handling possible failures.
  */
 class Barista(private val machine: CoffeeMachine) {
     fun handleOrder() {
-        try {
-            val coffee = machine.makeCoffee()
-            serveToCustomer(coffee)
-        } catch (e: NotEnoughBeansException) {
-            // do some specific error handling
-            // like refilling the beans compartment and retrying
-        } catch (e: Exception) {
-            // since the exception can be anything we
-            // can't do any valuable here
-        }
+        val coffee = machine.makeCoffee()
+        serveToCustomer(coffee)
     }
 }
 

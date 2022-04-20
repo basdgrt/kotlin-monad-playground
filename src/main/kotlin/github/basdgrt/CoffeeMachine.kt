@@ -1,20 +1,26 @@
 package github.basdgrt
 
+/*
+ * Although ugly, this works.
+ */
 class CoffeeMachine {
-    fun makeCoffee(): Coffee {
-        val beans = grindBeans()
-        return brew(beans)
+    fun makeCoffee(): Either<MachineFailure, Coffee> {
+        val beansEither = grindBeans()
+        return when (beansEither) {
+            is Either.Failure -> beansEither // instance of Failure
+            is Either.Success -> Either.Success(brew(beansEither.value))
+        }
     }
 }
 
-/**
- * @throws NotEnoughBeansException
- */
-private fun grindBeans(): CoffeeBeans = TODO()
+private fun grindBeans(): Either<MachineFailure, CoffeeBeans> = TODO()
 
 private fun brew(beans: CoffeeBeans): Coffee = TODO()
 
 object Coffee
 object CoffeeBeans
 
-object NotEnoughBeansException : RuntimeException()
+sealed class MachineFailure {
+    object NotEnoughBeans
+}
+
