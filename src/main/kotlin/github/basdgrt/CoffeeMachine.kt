@@ -2,13 +2,14 @@ package github.basdgrt
 
 class CoffeeMachine {
     fun makeCoffee(): Either<MachineFailure, Coffee> {
+        // Return type is Either<MachineFailure, Either<MachineFailure, Coffee>>, we put a box inside a box...
         return grindBeans().map { brew(it) }
     }
 }
 
 private fun grindBeans(): Either<MachineFailure, CoffeeBeans> = TODO()
 
-private fun brew(beans: CoffeeBeans): Coffee = TODO()
+private fun brew(beans: CoffeeBeans): Either<MachineFailure, Coffee> = TODO()
 
 object Coffee
 object CoffeeBeans

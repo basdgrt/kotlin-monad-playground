@@ -20,7 +20,7 @@ inline fun <A, B, C> Either<A, B>.fold(onError: (A) -> C, onSuccess: (B) -> C) =
     is Either.Success -> onSuccess(value)
 }
 
-inline fun <A, B> Either<A, B>.onFailure(function: (Either.Failure<A>) -> Nothing): B = when(this) {
-    is Either.Failure -> function(this)
+inline fun <A, B> Either<A, B>.onFailure(fn: (Either.Failure<A>) -> Nothing): B = when(this) {
+    is Either.Failure -> fn(this)
     is Either.Success -> value
 }
