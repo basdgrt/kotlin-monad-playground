@@ -2,19 +2,25 @@ package github.basdgrt
 
 class CoffeeMachine {
     fun makeCoffee(): Either<MachineFailure, Coffee> {
-        return grindBeans().flatMap { brew(it) }
+        return grindBeans().flatMap { beans ->
+            boilWater().flatMap { water ->
+                brew(beans, water)
+            }
+        }
     }
 }
 
 private fun grindBeans(): Either<MachineFailure, CoffeeBeans> = TODO()
+private fun boilWater(): Either<MachineFailure, Water> = TODO()
 
-private fun brew(beans: CoffeeBeans): Either<MachineFailure, Coffee> = TODO()
+private fun brew(beans: CoffeeBeans, water: Water): Either<MachineFailure, Coffee> = TODO()
 
 object Coffee
 object CoffeeBeans
+object Water
 
 sealed class MachineFailure {
-    object NotEnoughBeans
-    object MissingFilter
+    object NotEnoughBeans : MachineFailure()
+    object MissingFilter : MachineFailure()
 }
 
