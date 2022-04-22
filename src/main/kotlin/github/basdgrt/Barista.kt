@@ -1,13 +1,15 @@
 package github.basdgrt
 
-/*
- * Compilation fails because serveToCustomer expects coffee as input, but it receives an Either instead.
- * AKA compilation fails because we are not handling possible failures.
- */
 class Barista(private val machine: CoffeeMachine) {
     fun handleOrder() {
-        val coffee = machine.makeCoffee()
-        serveToCustomer(coffee)
+        val coffee = machine.makeCoffee().fold(
+            onSuccess = { serveToCustomer(it) },
+            onFailure = {
+                when (it) {
+                    MachineFailure.MissingFilter -> TODO()
+                    MachineFailure.NotEnoughBeans -> TODO()
+                }
+            })
     }
 }
 

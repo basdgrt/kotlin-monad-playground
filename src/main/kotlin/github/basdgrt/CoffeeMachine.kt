@@ -2,11 +2,9 @@ package github.basdgrt
 
 class CoffeeMachine {
     fun makeCoffee(): Either<MachineFailure, Coffee> {
-        return grindBeans().flatMap { beans ->
-            boilWater().flatMap { water ->
-                brew(beans, water)
-            }
-        }
+        val beans = grindBeans().onFailure { return it }
+        val water = boilWater().onFailure { return it }
+        return brew(beans, water)
     }
 }
 

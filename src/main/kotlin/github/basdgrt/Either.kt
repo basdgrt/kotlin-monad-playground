@@ -15,8 +15,8 @@ inline fun <A, B, C> Either<A, B>.flatMap(fn: (B) -> Either<A, C>) = when (this)
     is Either.Success -> fn(this.value)
 }
 
-inline fun <A, B, C> Either<A, B>.fold(onError: (A) -> C, onSuccess: (B) -> C) = when (this) {
-    is Either.Failure -> onError(value)
+inline fun <A, B, C> Either<A, B>.fold(onFailure: (A) -> C, onSuccess: (B) -> C) = when (this) {
+    is Either.Failure -> onFailure(value)
     is Either.Success -> onSuccess(value)
 }
 
