@@ -20,5 +20,6 @@ object Water
 sealed class MachineFailure {
     object NotEnoughBeans : MachineFailure()
     object MissingFilter : MachineFailure()
+    data class UnknownIssue(val exception: Exception) : MachineFailure()
 }
 
