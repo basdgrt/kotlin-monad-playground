@@ -8,7 +8,6 @@ class Barista(private val machine: CoffeeMachine) {
                 when (it) {
                     MachineFailure.MissingFilter -> TODO()
                     MachineFailure.NotEnoughBeans -> TODO()
-                    is MachineFailure.UnknownIssue -> TODO()
                 }
             })
     }

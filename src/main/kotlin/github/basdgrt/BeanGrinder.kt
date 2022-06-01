@@ -15,7 +15,7 @@ class BeansClient {
     /**
      * @throws OutOfBeansException
      */
-    fun getBeans(amountOfCups: Int): CoffeeBeans = TODO()
+    fun getBeans(amountOfCups: Int): CoffeeBeans = CoffeeBeans
 }
 
 object OutOfBeansException : Exception()
