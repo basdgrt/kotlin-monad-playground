@@ -1,15 +1,20 @@
 package github.basdgrt
 
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
+
 class Barista(private val machine: CoffeeMachine) {
-    fun handleOrder() {
-        val coffee = machine.makeCoffee().fold(
-            onSuccess = { serveToCustomer(it) },
-            onFailure = {
+    suspend fun handleOrder() {
+        machine.makeCoffee().fold(
+            ifRight = ::serveToCustomer,
+            ifLeft = {
                 when (it) {
                     MachineFailure.MissingFilter -> TODO()
                     MachineFailure.NotEnoughBeans -> TODO()
+                    is MachineFailure.UnknownIssue -> TODO()
                 }
-            })
+            }
+        )
     }
 }
 
