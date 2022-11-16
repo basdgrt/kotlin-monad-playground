@@ -18,7 +18,7 @@ object CoffeeBeans
 object Water
 
 sealed class MachineFailure {
-    object NotEnoughBeans : MachineFailure()
-    object MissingFilter : MachineFailure()
+    data class NotEnoughBeans(val requiredAmount: Int) : MachineFailure()
+    data class WaterTooCold(val requiredTemperature: Int) : MachineFailure()
 }
 

@@ -1,13 +1,15 @@
 package github.basdgrt
 
+import github.basdgrt.MachineFailure.*
+
 class Barista(private val machine: CoffeeMachine) {
     fun handleOrder() {
         val coffee = machine.makeCoffee().fold(
             onSuccess = { serveToCustomer(it) },
             onFailure = {
                 when (it) {
-                    MachineFailure.MissingFilter -> TODO()
-                    MachineFailure.NotEnoughBeans -> TODO()
+                    is NotEnoughBeans -> TODO()
+                    is WaterTooCold -> TODO()
                 }
             })
     }
