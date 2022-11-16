@@ -8,52 +8,60 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlin.time.Duration.Companion.seconds
 
-suspend fun brew(beans: CoffeeBeans, water: Water): Coffee {
-    println("Started brewing")
-    delay(1.seconds)
-    println("finished brewing")
-    return Coffee
-}
+class CoffeeMachine {
+    context (EffectScope<MachineFailure>)
+    suspend fun makeCoffee(): Coffee =
+        parZip(
+            Dispatchers.IO,
+            { grindBeans() },
+            { boilWater() }
+        ) { beans, water -> brew(beans, water) }
 
-suspend fun EffectScope<MachineFailure>.grindBeans(): CoffeeBeans {
-    println("started grinding beans")
-    delay(2.seconds)
-
-    if ((1..100).random() < 20) {
-        return shift(MachineFailure.NotEnoughBeans)
+    private suspend fun EffectScope<MachineFailure>.brew(beans: CoffeeBeans, water: Water): Coffee {
+        println("Started brewing")
+        delay(1.seconds)
+        println("finished brewing")
+        return Coffee
     }
 
-    println("finished grinding beans")
-    return CoffeeBeans
-}
+    private suspend fun EffectScope<MachineFailure>.grindBeans(): CoffeeBeans {
+        println("started grinding beans")
+        delay(2.seconds)
 
-suspend fun EffectScope<MachineFailure>.boilWater(): Water {
-    println("start boling water")
-    delay(1.seconds)
+        if ((1..100).random() < 20) {
+            return shift(MachineFailure.NotEnoughBeans)
+        }
 
-    if ((1..100).random() < 20) {
-        return shift(MachineFailure.MissingFilter)
+        println("finished grinding beans")
+        return CoffeeBeans
     }
 
-    println("finished boiling water")
-    return Water
+    private suspend fun EffectScope<MachineFailure>.boilWater(): Water {
+        println("start boling water")
+        delay(1.seconds)
+
+        if ((1..100).random() > 20) {
+            return shift(MachineFailure.MissingFilter)
+        }
+
+        println("finished boiling water")
+        return Water
+    }
 }
 
-suspend fun EffectScope<MachineFailure>.makeCoffee(): Coffee =
-    parZip(
-        Dispatchers.IO,
-        { grindBeans() },
-        { boilWater() }
-    ) { beans, water -> brew(beans, water) }
-
+class Barista(private val machine: CoffeeMachine) {
+    suspend fun handleOrder() {
+       effect { machine.makeCoffee() }
+           .toEither()
+           .fold(
+               ifRight = { println("Huge success")},
+               ifLeft = { println("Failed with $it")}
+           )
+    }
+}
 
 fun main() = runBlocking {
-    effect { makeCoffee() }
-        .toEither()
-        .fold(
-            ifRight = { println("Huge success")},
-            ifLeft = { println("Failed with $it")}
-        )
+    Barista(CoffeeMachine()).handleOrder()
 }
 
 object Coffee
