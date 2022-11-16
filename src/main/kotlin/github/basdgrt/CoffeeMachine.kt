@@ -1,6 +1,5 @@
 package github.basdgrt
 
-import arrow.core.left
 import arrow.core.Either
 import arrow.core.continuations.either
 
@@ -13,8 +12,8 @@ class CoffeeMachine {
         }
 }
 
-private fun grindBeans(): arrow.core.Either<MachineFailure, CoffeeBeans> = TODO()
-private fun boilWater(): arrow.core.Either<MachineFailure, Water> = TODO()
+private fun grindBeans(): Either<MachineFailure, CoffeeBeans> = TODO()
+private fun boilWater(): Either<MachineFailure, Water> = TODO()
 
 private fun brew(beans: CoffeeBeans, water: Water): Either<MachineFailure, Coffee> = TODO()
 
