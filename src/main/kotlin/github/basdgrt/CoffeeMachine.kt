@@ -1,21 +1,22 @@
 package github.basdgrt
 
-import arrow.core.Either
-import arrow.core.continuations.either
+import arrow.core.continuations.Effect
+import arrow.core.continuations.effect
 
 class CoffeeMachine {
-    suspend fun makeCoffee(): Either<MachineFailure, Coffee> =
-        either {
+    // MakeCoffee is a function that returns coffee, interrupts with MachineFailure, or throws a throwable
+    // Also show the updated barista
+    suspend fun makeCoffee(): Effect<MachineFailure, Coffee> =
+        effect {
             val beans = grindBeans().bind()
             val water = boilWater().bind()
             brew(beans, water).bind()
         }
 }
 
-private fun grindBeans(): Either<MachineFailure, CoffeeBeans> = TODO()
-private fun boilWater(): Either<MachineFailure, Water> = TODO()
-
-private fun brew(beans: CoffeeBeans, water: Water): Either<MachineFailure, Coffee> = TODO()
+private fun grindBeans(): Effect<MachineFailure, CoffeeBeans> = TODO()
+private fun boilWater(): Effect<MachineFailure, Water> = TODO()
+private fun brew(beans: CoffeeBeans, water: Water): Effect<MachineFailure, Coffee> = TODO()
 
 object Coffee
 object CoffeeBeans
