@@ -13,6 +13,8 @@ repositories {
 
 dependencies {
     implementation("io.arrow-kt:arrow-core:1.1.2")
+    implementation("io.arrow-kt:arrow-fx-coroutines:1.1.2")
+    implementation("io.arrow-kt:arrow-fx-stm:1.1.2")
     testImplementation(kotlin("test"))
 }
 
