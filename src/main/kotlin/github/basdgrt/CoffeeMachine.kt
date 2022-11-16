@@ -16,6 +16,7 @@ class CoffeeMachine {
         { boilWater() }
     ) { beans, water -> brew(beans, water) }
 
+    // TODO use context receiver here
     private suspend fun EffectScope<MachineFailure>.grindBeans(): CoffeeBeans = TODO()
     private suspend fun EffectScope<MachineFailure>.boilWater(): Water = TODO()
     private suspend fun EffectScope<MachineFailure>.brew(beans: CoffeeBeans, water: Water): Coffee = TODO()
