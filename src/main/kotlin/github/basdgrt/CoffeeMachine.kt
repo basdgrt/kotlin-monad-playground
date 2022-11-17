@@ -2,7 +2,6 @@ package github.basdgrt
 
 import arrow.core.continuations.EffectScope
 import arrow.core.continuations.effect
-import arrow.core.continuations.either
 import arrow.fx.coroutines.parZip
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -10,32 +9,35 @@ import kotlinx.coroutines.runBlocking
 
 class CoffeeMachine {
     context (EffectScope<MachineFailure>)
-    suspend fun makeCoffee(): Coffee = parZip(
+    suspend fun makeCoffee() = parZip(
         Dispatchers.IO,
         { grindBeans() },
         { boilWater() }
     ) { beans, water -> brew(beans, water) }
 
     // TODO use context receiver here
-    private suspend fun EffectScope<MachineFailure>.grindBeans(): CoffeeBeans = TODO()
-    private suspend fun EffectScope<MachineFailure>.boilWater(): Water = TODO()
-    private suspend fun EffectScope<MachineFailure>.brew(beans: CoffeeBeans, water: Water): Coffee = TODO()
+    context (EffectScope<MachineFailure>)
+    suspend fun grindBeans(): CoffeeBeans = TODO()
+
+    context (EffectScope<MachineFailure>)
+    suspend fun boilWater(): Water = TODO()
+
+    context (EffectScope<MachineFailure>)
+    suspend fun brew(beans: CoffeeBeans, water: Water): Coffee = TODO()
 }
 
 class Barista(private val machine: CoffeeMachine) {
-    suspend fun handleOrderFoo() = effect { machine.makeCoffee() }
+    suspend fun handleOrder() = effect { machine.makeCoffee() }
         .fold(
-            transform = { println("Huge success") },
-            recover = { /* pattern match over failures */ },
-            error = { /* do something with exception */ }
-        )
-
-    suspend fun handleOrder() = either { machine.makeCoffee() }
-        .fold(
-            ifRight = { println("Huge success") },
-            ifLeft = { /* pattern match over failures */ }
+            transform = { coffee -> serveToCustomer(coffee) },
+            recover = { machineFailure -> handleFailure(machineFailure) },
+            error = { println("Hope is postponed disappointment") }
         )
 }
+
+private fun serveToCustomer(coffee: Coffee): Unit = TODO()
+private fun handleFailure(failure: MachineFailure): Unit = TODO()
+
 
 fun main() = runBlocking {
     Barista(CoffeeMachine()).handleOrder()
