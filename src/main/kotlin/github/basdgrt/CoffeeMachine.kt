@@ -14,9 +14,9 @@ class CoffeeMachine {
         }
 }
 
-private fun grindBeans(): Effect<MachineFailure, CoffeeBeans> = TODO()
-private fun boilWater(): Effect<MachineFailure, Water> = TODO()
-private fun brew(beans: CoffeeBeans, water: Water): Effect<MachineFailure, Coffee> = TODO()
+private suspend fun grindBeans(): Effect<MachineFailure, CoffeeBeans> = TODO()
+private suspend fun boilWater(): Effect<MachineFailure, Water> = TODO()
+private suspend fun brew(beans: CoffeeBeans, water: Water): Effect<MachineFailure, Coffee> = TODO()
 
 object Coffee
 object CoffeeBeans
