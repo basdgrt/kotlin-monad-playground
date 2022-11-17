@@ -2,6 +2,8 @@ package github.basdgrt
 
 import arrow.core.continuations.Effect
 import arrow.core.continuations.effect
+import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.seconds
 
 class CoffeeMachine {
     // MakeCoffee is a function that returns coffee, interrupts with MachineFailure, or throws a throwable
@@ -14,9 +16,19 @@ class CoffeeMachine {
         }
 }
 
-private suspend fun grindBeans(): Effect<MachineFailure, CoffeeBeans> = TODO()
-private suspend fun boilWater(): Effect<MachineFailure, Water> = TODO()
-private suspend fun brew(beans: CoffeeBeans, water: Water): Effect<MachineFailure, Coffee> = TODO()
+suspend fun grindBeans(): Effect<MachineFailure, CoffeeBeans> = effect {
+    if (hasEnoughBeans()) {
+        delay(5.seconds)
+        CoffeeBeans
+    } else {
+        shift(MachineFailure.NotEnoughBeans)
+    }
+}
+
+suspend fun hasEnoughBeans(): Boolean = TODO()
+
+suspend fun boilWater(): Effect<MachineFailure, Water> = TODO()
+suspend fun brew(beans: CoffeeBeans, water: Water): Effect<MachineFailure, Coffee> = TODO()
 
 object Coffee
 object CoffeeBeans
